@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // Shared version utilities for dr-jskill scripts
 
-import { readFileSync, writeFileSync, existsSync, unlinkSync, mkdirSync, copyFileSync, appendFileSync } from 'node:fs';
+import { readFileSync, writeFileSync, existsSync, unlinkSync, mkdirSync, copyFileSync, appendFileSync, readdirSync, statSync } from 'node:fs';
 import { resolve, dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { execFileSync } from 'node:child_process';
@@ -37,6 +37,7 @@ export function getAngularVersion() { return getVersionValue('angularVersion', '
 export function getTestcontainersVersion() { return getVersionValue('testcontainersVersion', '2.0.0'); }
 export function getSpringFrameworkVersion() { return getVersionValue('springFrameworkVersion', '7.0'); }
 export function getHibernateVersion() { return getVersionValue('hibernateVersion', '7.1'); }
+export function getSpringdocVersion() { return getVersionValue('springdocVersion', '2.8.13'); }
 
 /**
  * Strip legacy qualifiers (.RELEASE, .GA) that Spring Boot 4+ no longer uses.
@@ -309,6 +310,109 @@ export function applyDotfiles(projectDir, options = {}) {
   }
 }
 
+function toPackagePath(packageName) {
+  return packageName.split('.').join('/');
+}
+
+function addPomDependencyIfMissing(pom, artifactId, dependencyXml) {
+  if (pom.includes(`<artifactId>${artifactId}</artifactId>`)) {
+    return pom;
+  }
+  return pom.replace('</dependencies>', `${dependencyXml}\n\t</dependencies>`);
+}
+
+function findModulePackages(basePackagePath) {
+  const modulesRoot = join(basePackagePath, 'modules');
+  if (!existsSync(modulesRoot)) {
+    return [];
+  }
+  return readdirSync(modulesRoot)
+    .filter(entry => statSync(join(modulesRoot, entry)).isDirectory())
+    .map(entry => entry.replace(/[^a-zA-Z0-9_]/g, ''))
+    .filter(Boolean);
+}
+
+/**
+ * Add Spring Modulith, Swagger grouping, and API versioning defaults.
+ */
+export function applyModulithSupport(projectDir, packageName) {
+  const pomPath = join(projectDir, 'pom.xml');
+  if (existsSync(pomPath)) {
+    let pom = readFileSync(pomPath, 'utf8');
+    if (!pom.includes('<springdoc.version>')) {
+      pom = pom.replace('</properties>', `\t\t<springdoc.version>${getSpringdocVersion()}</springdoc.version>\n\t</properties>`);
+    }
+
+    pom = addPomDependencyIfMissing(
+      pom,
+      'spring-modulith-starter-core',
+      '\t\t<dependency>\n\t\t\t<groupId>org.springframework.modulith</groupId>\n\t\t\t<artifactId>spring-modulith-starter-core</artifactId>\n\t\t</dependency>'
+    );
+    pom = addPomDependencyIfMissing(
+      pom,
+      'spring-modulith-starter-test',
+      '\t\t<dependency>\n\t\t\t<groupId>org.springframework.modulith</groupId>\n\t\t\t<artifactId>spring-modulith-starter-test</artifactId>\n\t\t\t<scope>test</scope>\n\t\t</dependency>'
+    );
+    pom = addPomDependencyIfMissing(
+      pom,
+      'springdoc-openapi-starter-webmvc-ui',
+      '\t\t<dependency>\n\t\t\t<groupId>org.springdoc</groupId>\n\t\t\t<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>\n\t\t\t<version>${springdoc.version}</version>\n\t\t</dependency>'
+    );
+    writeFileSync(pomPath, pom, 'utf8');
+  }
+
+  const propertiesPath = join(projectDir, 'src', 'main', 'resources', 'application.properties');
+  if (existsSync(propertiesPath)) {
+    const current = readFileSync(propertiesPath, 'utf8');
+    if (!current.includes('# === Spring Modulith + API versioning defaults ===')) {
+      appendFileSync(
+        propertiesPath,
+        '\n\n# === Spring Modulith + API versioning defaults ===\n' +
+        'spring.modulith.events.jdbc-schema-initialization.enabled=true\n' +
+        'springdoc.swagger-ui.path=/swagger-ui.html\n' +
+        'springdoc.api-docs.path=/v3/api-docs\n' +
+        '# Recommended URL pattern for Boot 4 path versioning: /api/v1/...\n' +
+        '# Keep controller mappings under /api/v{version}/... and group docs by module.\n'
+      );
+    }
+  }
+
+  const packagePath = toPackagePath(packageName);
+  const basePath = join(projectDir, 'src', 'main', 'java', packagePath);
+  const configDir = join(basePath, 'config');
+  mkdirSync(configDir, { recursive: true });
+
+  const modules = findModulePackages(basePath);
+  const groups = modules.length > 0 ? modules : ['catalog', 'orders'];
+  const beans = groups.map((moduleName, index) => `
+    @Bean
+    GroupedOpenApi ${moduleName}Api() {
+        return GroupedOpenApi.builder()
+            .group("${moduleName}")
+            .pathsToMatch("/api/v*/${moduleName}/**")
+            .packagesToScan("${packageName}.modules.${moduleName}")
+            .build();
+    }`).join('\n');
+
+  const swaggerConfigPath = join(configDir, 'ModuleSwaggerConfiguration.java');
+  if (!existsSync(swaggerConfigPath)) {
+    writeFileSync(
+      swaggerConfigPath,
+      `package ${packageName}.config;
+
+import org.springdoc.core.models.GroupedOpenApi;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
+public class ModuleSwaggerConfiguration {${beans}
+}
+`,
+      'utf8'
+    );
+  }
+}
+
 /**
  * Parse CLI arguments into an object with flags and positional args.
  */
@@ -320,6 +424,12 @@ export function parseArgs(argv) {
   while (i < args.length) {
     if (args[i] === '--boot-version') {
       flags.bootVersion = args[i + 1];
+      i += 2;
+    } else if (args[i] === '--architecture') {
+      flags.architecture = args[i + 1];
+      i += 2;
+    } else if (args[i] === '--build-tool') {
+      flags.buildTool = args[i + 1];
       i += 2;
     } else if (args[i] === '--project-type') {
       flags.projectType = args[i + 1];
