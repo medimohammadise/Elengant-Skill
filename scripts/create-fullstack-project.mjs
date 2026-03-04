@@ -2,14 +2,16 @@
 // Script to create a full-stack Spring Boot application from start.spring.io
 
 import {
-  getJavaVersion, resolveBootVersion, joinDependencies,
-  downloadAndExtractProject, parseArgs, applyDotfiles,
+  getJavaVersion, resolveBootVersion,
+  downloadAndExtractProject, parseArgs, applyDotfiles, applyModulithSupport,
 } from './lib/versions.mjs';
 
 function usage() {
   console.log(`Usage: node create-fullstack-project.mjs [PROJECT_NAME] [GROUP_ID] [ARTIFACT_ID] [PACKAGE_NAME] [JAVA_VERSION]
 Options:
   --boot-version <version>   Override Spring Boot version
+  --architecture <mode>      default | modulith (default: default)
+  --build-tool <tool>        maven only (default: maven)
   -h|--help                  Show this help`);
 }
 
@@ -25,6 +27,13 @@ const groupId = positional[1] || 'com.example';
 const artifactId = positional[2] || projectName;
 const packageName = positional[3] || `${groupId}.fullstack`;
 const javaVersion = positional[4] || getJavaVersion();
+const architecture = flags.architecture || 'default';
+const buildTool = flags.buildTool || 'maven';
+if (buildTool !== 'maven') {
+  console.error(`Unsupported build tool: ${buildTool}. This skill supports Maven only.`);
+  process.exit(1);
+}
+
 const bootVersion = flags.bootVersion || await resolveBootVersion();
 
 let dependencies = 'web,data-jpa,actuator,validation,devtools,postgresql,docker-compose,testcontainers,native';
@@ -46,6 +55,9 @@ await downloadAndExtractProject({
   dependencies,
 });
 applyDotfiles(projectName, { database: true, frontend: true });
+if (architecture === 'modulith') {
+  applyModulithSupport(projectName, packageName);
+}
 
 console.log(`✓ Full-stack Spring Boot application created successfully in ./${projectName}`);
 console.log('Includes:');

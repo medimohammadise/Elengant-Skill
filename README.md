@@ -26,6 +26,7 @@
 - **Docker-ready** applications with standard and native image builds
 - **Multiple front-end options**: Vue.js (default), React, Angular, or Vanilla JS
 - **Production-ready** configurations with PostgreSQL, REST APIs, and monitoring
+- **Spring Modulith support** with per-module Swagger API grouping, Boot 4 path-versioning conventions, and native-image readiness
 
 ## Comparison with JHipster
 
@@ -70,6 +71,7 @@ Additional references:
 - [Database Best Practices](references/DATABASE.md)
 - [Docker Deployment](references/DOCKER.md)
 - [Testing Guide](references/TEST.md)
+- [Spring Modulith Guide](references/MODULITH.md)
 - [Azure Deployment](references/AZURE.md)
 - **Versions manifest:** `versions.json` (read by `scripts/lib/versions.mjs`). Update this file first when bumping any tool/library version.
 
@@ -178,9 +180,18 @@ This skill follows the [Agent Skills specification](https://agentskills.io/speci
 - Java 25
 - Docker (for containerized deployments)
 
+## Packaging This Skill
+
+This repository stays Maven-only. The packaging snippet you shared is a Maven plugin configuration, so the repo now includes a root [`pom.xml`](/Users/mehdi/MyProject/Elengant-Skill/pom.xml) wired to `com.skillsjars:maven-plugin`.
+
+To build the skill artifact:
+
+```bash
+mvn package
+```
+
 ## License
 
 This project is licensed under the Apache License 2.0.
 
 See [LICENSE](LICENSE) file for details.
-

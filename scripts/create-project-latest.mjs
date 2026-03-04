@@ -4,8 +4,8 @@
 
 import {
   getJavaVersion, getBootPreferredMajor, getBootFallback,
-  resolveBootVersion, joinDependencies, downloadAndExtractProject, parseArgs,
-  applyDotfiles,
+  resolveBootVersion, downloadAndExtractProject, parseArgs,
+  applyDotfiles, applyModulithSupport,
 } from './lib/versions.mjs';
 
 const PREFERRED_BOOT_MAJOR = getBootPreferredMajor();
@@ -18,6 +18,8 @@ function usage() {
 Environment / Flags:
   --boot-version <version>   Override Spring Boot version (otherwise resolves preferred major with fallback)
   --project-type <type>      basic | web | fullstack (default: web)
+  --architecture <mode>      default | modulith (default: default)
+  --build-tool <tool>        maven only (default: maven)
   -h|--help                  Show this help
 
 Examples:
@@ -38,6 +40,13 @@ const artifactId = positional[2] || projectName;
 const packageName = positional[3] || `${groupId}.app`;
 const javaVersion = positional[4] || JAVA_VERSION_DEFAULT;
 const projectType = positional[5] || flags.projectType || 'web';
+
+const architecture = flags.architecture || 'default';
+const buildTool = flags.buildTool || 'maven';
+if (buildTool !== 'maven') {
+  console.error(`Unsupported build tool: ${buildTool}. This skill supports Maven only.`);
+  process.exit(1);
+}
 
 const bootVersion = flags.bootVersion
   ? flags.bootVersion
@@ -85,6 +94,9 @@ await downloadAndExtractProject({
 const hasDatabase = projectType === 'fullstack';
 const hasFrontend = projectType === 'fullstack';
 applyDotfiles(projectName, { database: hasDatabase, frontend: hasFrontend });
+if (architecture === 'modulith') {
+  applyModulithSupport(projectName, packageName);
+}
 
 console.log('');
 console.log(`✓ Spring Boot project created successfully in ./${projectName}`);

@@ -20,6 +20,7 @@ Centralized versions live in `versions.json`. All scripts read from it via `scri
 
 ## Capabilities
 - Generate Spring Boot projects with predefined configurations
+- Optional Spring Modulith architecture (`--architecture modulith`) with module-level Swagger API grouping and path versioning conventions
 - Support for various Spring Boot versions and dependencies
 - Follow best practices for project structure and configuration
 - Quick setup scripts for common use cases
@@ -48,6 +49,7 @@ node scripts/create-project-latest.mjs my-app com.myco my-app com.myco.myapp 21 
 Flags supported:
 - `--boot-version <x.y.z>` / `-BootVersion`: override Spring Boot version
 - `--project-type basic|web|fullstack` / `-ProjectType`
+- `--architecture default|modulith`: enable Spring Modulith scaffolding (Swagger grouping + path versioning conventions)
 
 > Tip: The `create-project-latest` script auto-resolves preferred Boot 4.x and falls back to the configured `springBootFallback` if 4.x is not yet available. Override with `--boot-version` if needed.
 
@@ -217,6 +219,7 @@ Once the project is generated, go through the steps above to ensure that the gen
 - [Spring Boot 4 Migration Guide](references/SPRING-BOOT-4.md) - Key changes from Spring Boot 3, Jackson 3 annotations
 - [Configuration Best Practices](references/CONFIGURATION.md) - Properties files, profiles, secrets management
 - [Logging Best Practices](references/LOGGING.md) - Logback configuration and patterns
+- [Spring Modulith Best Practices](references/MODULITH.md) - Module boundaries, Swagger grouping, path versioning, native builds
 
 **Data and Persistence:**
 - [Database Best Practices](references/DATABASE.md) - PostgreSQL and Hibernate optimization

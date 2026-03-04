@@ -15,7 +15,7 @@ Creates a Spring Boot project using the **latest available Spring Boot version**
 
 **Usage:**
 ```bash
-node scripts/create-project-latest.mjs [project-name] [group-id] [artifact-id] [package-name] [java-version] [project-type] [--boot-version x.y.z]
+node scripts/create-project-latest.mjs [project-name] [group-id] [artifact-id] [package-name] [java-version] [project-type] [--boot-version x.y.z] [--architecture modulith]
 ```
 
 **Example:**
@@ -41,13 +41,14 @@ node scripts/create-project-latest.mjs my-app com.mycompany my-app com.mycompany
 - ✓ Supports Spring Boot 4.x and beyond
 - ✓ Flexible project types
 - ✓ Uses Java 25 by default
+- ✓ Optional Spring Modulith mode (`--architecture modulith`) with Swagger module grouping and API path-versioning conventions
 
 ### 1. create-basic-project.mjs
 Creates a minimal Spring Boot project with essential dependencies.
 
 **Usage:**
 ```bash
-node scripts/create-basic-project.mjs [project-name] [group-id] [artifact-id] [package-name] [java-version]
+node scripts/create-basic-project.mjs [project-name] [group-id] [artifact-id] [package-name] [java-version] [--architecture modulith]
 ```
 
 **Example:**
@@ -72,7 +73,7 @@ Creates a Spring Boot web application with REST API capabilities.
 
 **Usage:**
 ```bash
-node scripts/create-web-project.mjs [project-name] [group-id] [artifact-id] [package-name] [java-version]
+node scripts/create-web-project.mjs [project-name] [group-id] [artifact-id] [package-name] [java-version] [--architecture modulith]
 ```
 
 **Example:**
@@ -98,7 +99,7 @@ Creates a comprehensive Spring Boot application with database, security, and web
 
 **Usage:**
 ```bash
-node scripts/create-fullstack-project.mjs [project-name] [group-id] [artifact-id] [package-name] [java-version]
+node scripts/create-fullstack-project.mjs [project-name] [group-id] [artifact-id] [package-name] [java-version] [--architecture modulith]
 ```
 
 **Example:**
@@ -245,3 +246,10 @@ docker build -t my-project .
 # GraalVM native image
 docker build -f Dockerfile-native -t my-project-native .
 ```
+
+
+## Build tool support
+
+- This skill supports **Maven only** and always generates a `pom.xml`.
+- Passing `--build-tool gradle` now fails fast with a clear error message.
+- Java 25 remains the default across scripts.
