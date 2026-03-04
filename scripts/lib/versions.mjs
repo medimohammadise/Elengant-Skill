@@ -38,6 +38,7 @@ export function getTestcontainersVersion() { return getVersionValue('testcontain
 export function getSpringFrameworkVersion() { return getVersionValue('springFrameworkVersion', '7.0'); }
 export function getHibernateVersion() { return getVersionValue('hibernateVersion', '7.1'); }
 export function getSpringdocVersion() { return getVersionValue('springdocVersion', '2.8.13'); }
+export function getSkillsJarsMavenPluginVersion() { return getVersionValue('skillsjarsMavenPluginVersion', '0.0.5'); }
 
 /**
  * Strip legacy qualifiers (.RELEASE, .GA) that Spring Boot 4+ no longer uses.

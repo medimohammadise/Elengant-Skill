@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.skillsjars</groupId>
+    <artifactId>dr-jskill</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <packaging>jar</packaging>
+
+    <name>Dr JSkill</name>
+    <description>Spring Boot skill packaged with the SkillsJars Maven plugin.</description>
+
+    <properties>
+        <skillsjars.maven-plugin.version>0.0.5</skillsjars.maven-plugin.version>
+        <maven.resources.plugin.version>3.3.1</maven.resources.plugin.version>
+        <maven.jar.plugin.version>3.4.2</maven.jar.plugin.version>
+    </properties>
+
+    <build>
+        <resources>
+            <resource>
+                <directory>${project.basedir}</directory>
+                <targetPath>META-INF/skills/${project.artifactId}</targetPath>
+                <filtering>false</filtering>
+                <includes>
+                    <include>SKILL.md</include>
+                    <include>README.md</include>
+                    <include>versions.json</include>
+                    <include>assets/**</include>
+                    <include>references/**</include>
+                </includes>
+                <excludes>
+                    <exclude>target/**</exclude>
+                    <exclude>.git/**</exclude>
+                    <exclude>.idea/**</exclude>
+                </excludes>
+            </resource>
+        </resources>
+
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>${maven.resources.plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>copy-skill-assets</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.outputDirectory}/META-INF/skills/${project.artifactId}</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>${project.basedir}</directory>
+                                    <filtering>false</filtering>
+                                    <includes>
+                                        <include>SKILL.md</include>
+                                        <include>README.md</include>
+                                        <include>versions.json</include>
+                                        <include>assets/**</include>
+                                        <include>references/**</include>
+                                    </includes>
+                                    <excludes>
+                                        <exclude>target/**</exclude>
+                                        <exclude>.git/**</exclude>
+                                        <exclude>.idea/**</exclude>
+                                    </excludes>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>${maven.jar.plugin.version}</version>
+                <configuration>
+                    <includes>
+                        <include>META-INF/**</include>
+                    </includes>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>com.skillsjars</groupId>
+                <artifactId>maven-plugin</artifactId>
+                <version>${skillsjars.maven-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>package</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>

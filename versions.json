@@ -16,5 +16,6 @@
   "testcontainersVersion": "2.0.0",
   "springFrameworkVersion": "7.0",
   "hibernateVersion": "7.1",
-  "springdocVersion": "2.8.13"
+  "springdocVersion": "2.8.13",
+  "skillsjarsMavenPluginVersion": "0.0.5"
 }

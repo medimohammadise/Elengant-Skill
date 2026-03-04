@@ -180,9 +180,18 @@ This skill follows the [Agent Skills specification](https://agentskills.io/speci
 - Java 25
 - Docker (for containerized deployments)
 
+## Packaging This Skill
+
+This repository stays Maven-only. The packaging snippet you shared is a Maven plugin configuration, so the repo now includes a root [`pom.xml`](/Users/mehdi/MyProject/Elengant-Skill/pom.xml) wired to `com.skillsjars:maven-plugin`.
+
+To build the skill artifact:
+
+```bash
+mvn package
+```
+
 ## License
 
 This project is licensed under the Apache License 2.0.
 
 See [LICENSE](LICENSE) file for details.
-
