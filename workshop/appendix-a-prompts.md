@@ -191,7 +191,7 @@ message summarizing what's in the diff. Do not push.
 
 **Read the conventions:**
 ```
-Read SKILL.md and references/DATABASE.md before answering.
+Read SKILL.md, references/DATABASE.md, and references/SPRING-DATA-JPA-HIBERNATE.md before answering.
 ```
 
 **Follow a specific reference:**
@@ -203,7 +203,7 @@ section in your response.
 **Question a Dr JSkill choice:**
 ```
 Dr JSkill prefers Hibernate ddl-auto over Flyway. Summarize the rationale
-from the references, then tell me under what conditions I should reconsider
+from references/SPRING-DATA-JPA-HIBERNATE.md, then tell me under what conditions I should reconsider
 that choice for this project.
 ```
 

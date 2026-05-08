@@ -130,7 +130,7 @@ Two things worth noticing:
 - `update` (dev default): creates missing tables, adds new columns. Never drops.
 - `validate` (prod default): only checks that the schema matches — fails fast if it doesn't.
 
-See [`references/DATABASE.md`](../references/DATABASE.md) for the full story.
+See [`references/SPRING-DATA-JPA-HIBERNATE.md`](../references/SPRING-DATA-JPA-HIBERNATE.md) for the full story.
 
 **`spring.datasource.*` uses environment variables** with fallback defaults. Production overrides them via real env vars; `.env.sample` documents what they are.
 

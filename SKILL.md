@@ -1,12 +1,20 @@
 ---
 name: dr-jskill
 description: "Creates Java + Spring Boot projects: Web applications, full-stack apps with Vue.js or Angular or React or vanilla JS, PostgreSQL, REST APIs, and Docker. Use when creating Spring Boot projects, setting up Java microservices, or building enterprise applications with the Spring Framework."
+license: Apache-2.0
+compatibility: Requires Java 25, Maven, Docker, Node.js, and network access to start.spring.io for project generation.
 ---
 
 # Spring Boot skill that follows Julien Dubois' best practices.
 
 ## Overview
 This agent skill helps you create Spring Boot projects following [Julien Dubois](https://www.julien-dubois.com)' best practices. It provides tools and scripts to quickly bootstrap Spring Boot applications using [https://start.spring.io](https://start.spring.io).
+
+Keep the main skill focused on Spring Boot application generation and general project guidance. Load persistence-specific guidance only when the task is about Spring Data JPA, Hibernate entities, or ORM tuning.
+
+- Core Spring Boot, Docker, testing, front-end, and deployment guidance stays in `SKILL.md` and the general references.
+- Spring Data JPA and Hibernate guidance lives in [references/SPRING-DATA-JPA-HIBERNATE.md](references/SPRING-DATA-JPA-HIBERNATE.md).
+- PostgreSQL runtime setup, Docker Compose, and Testcontainers guidance lives in [references/DATABASE.md](references/DATABASE.md).
 
 ## Version Management
 
@@ -87,8 +95,8 @@ When creating Spring Boot projects:
 1. Use the latest Spring Boot version (currently 4.x) - the `create-project-latest.mjs` script automatically fetches it
 2. **Review Spring Boot 4 critical considerations**: See [Spring Boot 4 Migration Guide](references/SPRING-BOOT-4.md) for Jackson 3 annotations and TestContainers configuration
 3. Include Spring Boot Actuator for production-ready features
-4. Use Spring Data JPA for database access
-5. Use PostgreSQL for database - see [Database Best Practices](references/DATABASE.md) for optimization
+4. Use Spring Data JPA for database access - see [Spring Data JPA & Hibernate Guide](references/SPRING-DATA-JPA-HIBERNATE.md)
+5. Use PostgreSQL for database runtime setup - see [Database Best Practices](references/DATABASE.md)
 6. Use properties files for configuration - see [Configuration Best Practices](references/CONFIGURATION.md)
 7. Set up foundational dotfiles: `.gitignore`, `.env.sample`, `.editorconfig`, `.gitattributes`, `.dockerignore`, optional `.vscode/`, `.devcontainer/` - see [Project Setup & Dotfiles](references/PROJECT-SETUP.md)
    - The `.env` file is the canonical location for local secrets; instruct users to copy `.env.sample` → `.env` and fill in real values
@@ -188,7 +196,9 @@ Use `.properties` files (not YAML), externalize secrets via environment variable
 
 The `.env` file is the single local secret store — never read or print it; only `.env.sample` (placeholder values) may be shown.
 
-**For database optimization**, see the [Database Best Practices Guide](references/DATABASE.md).
+**For JPA/Hibernate modeling and ORM performance**, see the [Spring Data JPA & Hibernate Guide](references/SPRING-DATA-JPA-HIBERNATE.md).
+
+**For PostgreSQL runtime setup and operations**, see the [Database Best Practices Guide](references/DATABASE.md).
 
 ## Security (Optional)
 
@@ -254,7 +264,8 @@ Once the project is generated, go through the steps above to ensure that the gen
 - [Java Code Intelligence (JDTLS)](references/JDTLS.md) - LSP-based navigation, refactoring, diagnostics
 
 **Data and Persistence:**
-- [Database Best Practices](references/DATABASE.md) - PostgreSQL and Hibernate optimization
+- [Spring Data JPA & Hibernate Guide](references/SPRING-DATA-JPA-HIBERNATE.md) - Entities, repositories, `ddl-auto`, and ORM performance patterns
+- [Database Best Practices](references/DATABASE.md) - PostgreSQL runtime setup, Docker Compose, Testcontainers, and production operations
 
 **Security (Optional):**
 - [Security Guide](references/SECURITY.md) - Spring Security, JWT, OAuth2, authentication patterns

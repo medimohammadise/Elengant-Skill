@@ -883,7 +883,7 @@ management.endpoints.web.exposure.include=health,info,metrics,prometheus
 management.metrics.distribution.percentiles-histogram.http.server.requests=true
 ```
 
-See `references/LOGGING.md` for structured logging setup and `references/DATABASE.md` for Hibernate-specific tuning.
+See `references/LOGGING.md` for structured logging setup and `references/SPRING-DATA-JPA-HIBERNATE.md` for Hibernate-specific tuning.
 
 ## Resources
 

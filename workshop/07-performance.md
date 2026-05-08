@@ -91,7 +91,7 @@ In TodoService, mark the read methods (findAll, findByUserId, findById) with
 the default @Transactional. Do the same for AppUserService if it exists.
 ```
 
-See [`references/DATABASE.md`](../references/DATABASE.md#read-only-transactions) for the rationale.
+See [`references/SPRING-DATA-JPA-HIBERNATE.md`](../references/SPRING-DATA-JPA-HIBERNATE.md#read-only-transactions) for the rationale.
 
 ## 6. Lazy-loaded routes (front-end)
 
@@ -138,7 +138,7 @@ Add a p6spy dependency (test scope) and configure it to log SQL statements
 with their execution time during tests. No change to production code.
 ```
 
-Run `./mvnw verify` and watch the test output. If a single "list todos" endpoint produces dozens of SQL statements for N todos, you have an N+1. Ask the agent to fix it with `@EntityGraph` or `JOIN FETCH` — the pattern is in [`references/DATABASE.md`](../references/DATABASE.md#avoiding-n1-queries).
+Run `./mvnw verify` and watch the test output. If a single "list todos" endpoint produces dozens of SQL statements for N todos, you have an N+1. Ask the agent to fix it with `@EntityGraph` or `JOIN FETCH` — the pattern is in [`references/SPRING-DATA-JPA-HIBERNATE.md`](../references/SPRING-DATA-JPA-HIBERNATE.md#avoiding-n1-queries).
 
 ## 9. Stop optimizing
 
@@ -152,10 +152,10 @@ A real application needs maybe five to ten of these tweaks applied **thoughtfull
 |---|---|---|---|
 | Virtual threads | 1 property | ↑ RPS on IO-bound endpoints | [`references/SPRING-BOOT-4.md`](../references/SPRING-BOOT-4.md) |
 | HTTP compression | 2 properties | ↓ bytes on the wire | [`references/SPRING-BOOT-4.md`](../references/SPRING-BOOT-4.md) |
-| Read-only transactions | 1 annotation per method | ↓ DB work on queries | [`references/DATABASE.md`](../references/DATABASE.md) |
+| Read-only transactions | 1 annotation per method | ↓ DB work on queries | [`references/SPRING-DATA-JPA-HIBERNATE.md`](../references/SPRING-DATA-JPA-HIBERNATE.md) |
 | Lazy routes | 1 import per route | ↓ initial bundle | [`references/VUE.md`](../references/VUE.md) |
 | Static asset caching | 2 properties | ↓ repeat requests | [`references/SPRING-BOOT-4.md`](../references/SPRING-BOOT-4.md) |
-| N+1 detection in tests | 1 dep + config | ↓ surprises in prod | [`references/DATABASE.md`](../references/DATABASE.md) |
+| N+1 detection in tests | 1 dep + config | ↓ surprises in prod | [`references/SPRING-DATA-JPA-HIBERNATE.md`](../references/SPRING-DATA-JPA-HIBERNATE.md) |
 
 ---
 

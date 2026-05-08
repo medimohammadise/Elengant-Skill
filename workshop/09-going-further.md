@@ -140,7 +140,7 @@ You'll find the rough edges faster than on your own, and you'll discover which p
 
 | Topic | File |
 |---|---|
-| Database tuning, pagination, caching | [`references/DATABASE.md`](../references/DATABASE.md) |
+| Database tuning, pagination, caching | [`references/SPRING-DATA-JPA-HIBERNATE.md`](../references/SPRING-DATA-JPA-HIBERNATE.md) |
 | Authentication, CSRF, security headers | [`references/SECURITY.md`](../references/SECURITY.md) |
 | Structured logging, correlation IDs | [`references/LOGGING.md`](../references/LOGGING.md) |
 | Spring Boot 4 migration, virtual threads, performance | [`references/SPRING-BOOT-4.md`](../references/SPRING-BOOT-4.md) |

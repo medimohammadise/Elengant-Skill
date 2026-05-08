@@ -50,6 +50,7 @@ For complete documentation, usage instructions, and best practices, see **[SKILL
 Additional references:
 - [Project Setup & Dotfiles](references/PROJECT-SETUP.md)
 - [Front-end Development Guides](references/) (Vue.js, React, Angular, Vanilla JS)
+- [Spring Data JPA & Hibernate Guide](references/SPRING-DATA-JPA-HIBERNATE.md)
 - [Database Best Practices](references/DATABASE.md)
 - [Docker Deployment](references/DOCKER.md)
 - [Testing Guide](references/TEST.md)
@@ -166,4 +167,3 @@ This skill follows the [Agent Skills specification](https://agentskills.io/speci
 This project is licensed under the Apache License 2.0.
 
 See [LICENSE](LICENSE) file for details.
-
